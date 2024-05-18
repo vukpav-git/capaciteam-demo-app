@@ -1,6 +1,7 @@
 {
   "name": "capaciteam-demo-app",
   "version": "0.1.0",
+  "author": "VPavkovic",
   "proxy": "https://api.oireachtas.ie/v1",
   "private": true,
   "dependencies": {
