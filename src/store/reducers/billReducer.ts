@@ -21,7 +21,10 @@ function billReducer(state = initialState, action: any) {
       return {
         ...state,
         bills: action.payload?.results,
-        billsFiltered: action.payload?.results,
+        billsFiltered: action.payload?.results?.sort(
+          (a: any, b: any) =>
+            parseFloat(a.bill?.billNo) - parseFloat(b.bill?.billNo),
+        ),
         resultCount: action.payload?.head?.counts?.resultCount,
         language: action.payload?.head?.lang,
       };
@@ -33,13 +36,37 @@ function billReducer(state = initialState, action: any) {
       return {
         ...state,
         billsFiltered: [
-          ...state.bills.filter((item: any) => item !== action.payload),
-        ],
+          ...state.billsFiltered.filter(
+            (item: any) => item.bill.billNo !== action.payload,
+          ),
+          {
+            ...state.billsFiltered.filter(
+              (item: any) => item.bill.billNo === action.payload,
+            )[0],
+            favorites: true,
+          },
+        ].sort(
+          (a: any, b: any) =>
+            parseFloat(a.bill?.billNo) - parseFloat(b.bill?.billNo),
+        ),
       };
     case REMOVE_BILL_FROM_FAVORITES:
       return {
         ...state,
-        billsFiltered: state.bills,
+        billsFiltered: [
+          ...state.billsFiltered.filter(
+            (item: any) => item.bill.billNo !== action.payload,
+          ),
+          {
+            ...state.billsFiltered.filter(
+              (item: any) => item.bill.billNo === action.payload,
+            )[0],
+            favorites: false,
+          },
+        ].sort(
+          (a: any, b: any) =>
+            parseFloat(a.bill?.billNo) - parseFloat(b.bill?.billNo),
+        ),
       };
     case FILTER_BILLS_TYPE_STARTED:
       return {
@@ -61,7 +88,10 @@ function billReducer(state = initialState, action: any) {
               ? item.bill.billType !== action.payload
               : item.bill.billType === action.payload,
           ),
-        ],
+        ].sort(
+          (a: any, b: any) =>
+            parseFloat(a.bill?.billNo) - parseFloat(b.bill?.billNo),
+        ),
       };
     default:
       return state;

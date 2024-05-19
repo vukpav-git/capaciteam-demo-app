@@ -7,6 +7,7 @@ import {
   GET_BILLS_ENDED,
   GET_BILLS_ERROR,
   GET_BILLS_STARTED,
+  REMOVE_BILL_FROM_FAVORITES,
 } from "./ActionTypes";
 
 export const getBillsData = async (
@@ -39,10 +40,17 @@ export const toggleFavorites = async (
   billNo: string,
   favorites?: boolean,
 ) => {
-  // TODO remove
-  console.log("@@@@@@!!@@@", favorites, billNo);
   try {
-    dispatch({ type: ADD_BILL_TO_FAVORITES, payload: billNo });
+    // since there is no API "POST" for this, here is a mock action as requested in test
+    console.log(
+      `API CALL MOCK: billNo ${billNo} ${!favorites ? "added to" : "removed from"} favorites`,
+    );
+
+    if (favorites) {
+      dispatch({ type: REMOVE_BILL_FROM_FAVORITES, payload: billNo });
+    } else {
+      dispatch({ type: ADD_BILL_TO_FAVORITES, payload: billNo });
+    }
   } catch (e) {
     console.error("Error:", e);
   }

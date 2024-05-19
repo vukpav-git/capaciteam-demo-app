@@ -68,6 +68,29 @@ const BasicTable = () => {
     toggleFavorites(dispatch, billNo, favorites);
   };
 
+  const handleOpenRow = (row: any) => {
+    setSelectedRow({
+      favorites: row.favorites,
+      bill: {
+        billNo: row.bill?.billNo,
+        billType: row.bill?.billType,
+        status: row.bill?.status,
+        sponsors: [
+          {
+            sponsor: {
+              as: {
+                showAs: row.bill?.sponsors[0]?.sponsor?.as?.showAs,
+              },
+              by: {
+                showAs: row.bill?.sponsors[0]?.sponsor?.by?.showAs,
+              },
+            },
+          },
+        ],
+      },
+    });
+  };
+
   return (
     <>
       {error && <Alert severity="warning">Load of data failed!</Alert>}
@@ -104,65 +127,57 @@ const BasicTable = () => {
                             background: colors.green,
                             cursor: "pointer",
                           },
+                          zIndex: 10,
                         }}
-                        onClick={() =>
-                          setSelectedRow({
-                            bill: {
-                              billNo: row.bill.billNo,
-                              billType: row.bill.billType,
-                              status: row.bill.status,
-                              favorites: row.bill.favorites,
-                              sponsors: [
-                                {
-                                  sponsor: {
-                                    as: {
-                                      showAs:
-                                        row.bill.sponsors[0]?.sponsor?.as
-                                          ?.showAs,
-                                    },
-                                    by: {
-                                      showAs:
-                                        row.bill.sponsors[0]?.sponsor?.by
-                                          ?.showAs,
-                                    },
-                                  },
-                                },
-                              ],
-                            },
-                          })
-                        }
                       >
-                        <TableCell component="th" scope="row">
+                        <TableCell
+                          onClick={() => handleOpenRow(row)}
+                          component="th"
+                          scope="row"
+                        >
                           {row.bill?.billNo}
                         </TableCell>
-                        <TableCell align="right">{row.bill.billType}</TableCell>
-                        <TableCell align="right">{row.bill.status}</TableCell>
-                        <TableCell align="right">
-                          {row.bill.sponsors[0]?.sponsor?.by?.showAs ||
-                            row.bill.sponsors[0]?.sponsor?.as?.showAs}
+                        <TableCell
+                          onClick={() => handleOpenRow(row)}
+                          align="right"
+                        >
+                          {row.bill?.billType}
                         </TableCell>
-                        <TableCell align="right">
-                          {row.bill.favorites ? (
+                        <TableCell
+                          onClick={() => handleOpenRow(row)}
+                          align="right"
+                        >
+                          {row.bill?.status}
+                        </TableCell>
+                        <TableCell
+                          onClick={() => handleOpenRow(row)}
+                          align="right"
+                        >
+                          {row.bill?.sponsors[0]?.sponsor?.by?.showAs ||
+                            row.bill?.sponsors[0]?.sponsor?.as?.showAs}
+                        </TableCell>
+                        <TableCell
+                          onClick={() =>
+                            handleFavoritesToggle(
+                              row.bill?.billNo,
+                              row?.favorites,
+                            )
+                          }
+                          align="right"
+                        >
+                          {row?.favorites ? (
                             <Box
-                              component="span"
-                              onClick={() =>
-                                handleFavoritesToggle(
-                                  row.bill.billNo,
-                                  row.bill.favorites,
-                                )
-                              }
+                              zIndex={100}
+                              position="relative"
+                              component="div"
                             >
                               <StarIcon />
                             </Box>
                           ) : (
                             <Box
-                              component="span"
-                              onClick={() =>
-                                handleFavoritesToggle(
-                                  row.bill.billNo,
-                                  row.bill.favorites,
-                                )
-                              }
+                              zIndex={100}
+                              position="relative"
+                              component="div"
                             >
                               <StarBorderIcon />
                             </Box>
@@ -196,15 +211,15 @@ const BasicTable = () => {
       <BillDetailsModal
         isOpen={modalOpen}
         handleClose={() => setModalOpen(false)}
-        billNo={selectedRow?.bill.billNo || ""}
+        billNo={selectedRow?.bill?.billNo || ""}
         billSponsor={
-          selectedRow?.bill.sponsors[0].sponsor.as.showAs ||
-          selectedRow?.bill.sponsors[0].sponsor.by.showAs ||
+          selectedRow?.bill?.sponsors[0]?.sponsor?.as?.showAs ||
+          selectedRow?.bill?.sponsors[0]?.sponsor?.by?.showAs ||
           ""
         }
-        billStatus={selectedRow?.bill.status || ""}
-        billType={selectedRow?.bill.billType || ""}
-        favorites={selectedRow?.bill.favorites || false}
+        billStatus={selectedRow?.bill?.status || ""}
+        billType={selectedRow?.bill?.billType || ""}
+        favorites={selectedRow?.favorites || false}
       />
     </>
   );

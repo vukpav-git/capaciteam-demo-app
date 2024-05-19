@@ -1,4 +1,4 @@
-import "./styles/App.css";
+import "./styles/global.css";
 
 import { Provider } from "react-redux";
 

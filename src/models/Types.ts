@@ -1,4 +1,5 @@
 export interface IBillDataRow {
+  favorites?: boolean;
   bill: {
     billNo: string;
     billType: string;

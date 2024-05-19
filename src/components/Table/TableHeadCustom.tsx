@@ -11,7 +11,7 @@ const TableHeadCustom = ({ columns }: TableHeadCustomProps) => {
   const headingStyle = {
     fontWeight: 700,
     fontSize: 16,
-    background: colors.lightgreen,
+    background: colors.lightGreen,
     color: colors.charcoal,
     fontFamily: "monospace",
   };
