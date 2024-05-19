@@ -1,6 +1,7 @@
 import { BillTypes } from "../../models/Types";
 import {
   ADD_BILL_TO_FAVORITES,
+  CHANGE_LOCALE,
   FILTER_BILLS_TYPE,
   FILTER_BILLS_TYPE_ENDED,
   FILTER_BILLS_TYPE_STARTED,
@@ -49,6 +50,20 @@ function billReducer(state = initialState, action: any) {
           (a: any, b: any) =>
             parseFloat(a.bill?.billNo) - parseFloat(b.bill?.billNo),
         ),
+        bills: [
+          ...state.bills.filter(
+            (item: any) => item.bill.billNo !== action.payload,
+          ),
+          {
+            ...state.bills.filter(
+              (item: any) => item.bill.billNo === action.payload,
+            )[0],
+            favorites: true,
+          },
+        ].sort(
+          (a: any, b: any) =>
+            parseFloat(a.bill?.billNo) - parseFloat(b.bill?.billNo),
+        ),
       };
     case REMOVE_BILL_FROM_FAVORITES:
       return {
@@ -59,6 +74,20 @@ function billReducer(state = initialState, action: any) {
           ),
           {
             ...state.billsFiltered.filter(
+              (item: any) => item.bill.billNo === action.payload,
+            )[0],
+            favorites: false,
+          },
+        ].sort(
+          (a: any, b: any) =>
+            parseFloat(a.bill?.billNo) - parseFloat(b.bill?.billNo),
+        ),
+        bills: [
+          ...state.bills.filter(
+            (item: any) => item.bill.billNo !== action.payload,
+          ),
+          {
+            ...state.bills.filter(
               (item: any) => item.bill.billNo === action.payload,
             )[0],
             favorites: false,
@@ -92,6 +121,11 @@ function billReducer(state = initialState, action: any) {
           (a: any, b: any) =>
             parseFloat(a.bill?.billNo) - parseFloat(b.bill?.billNo),
         ),
+      };
+    case CHANGE_LOCALE:
+      return {
+        ...state,
+        locale: action.payload,
       };
     default:
       return state;

@@ -1,5 +1,6 @@
 import type { Dispatch } from "redux";
 
+import type { TLanguage } from "../../models/Types";
 import { fetchBillsDataAPI } from "../../services/fetchBillsApi";
 import {
   ADD_BILL_TO_FAVORITES,
@@ -14,7 +15,7 @@ export const getBillsData = async (
   dispatch: Dispatch,
   limit?: number,
   skip?: number,
-  lang?: string,
+  lang?: TLanguage,
 ) => {
   try {
     dispatch({ type: GET_BILLS_STARTED });

@@ -34,3 +34,8 @@ export enum BillTypes {
   Public = "Public",
   Private = "Private",
 }
+
+export enum SupportedLanguages {
+  English = "English",
+  Gaeilge = "Gaeilge",
+}

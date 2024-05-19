@@ -1,0 +1,11 @@
+{
+  "bill.number": "Bill number",
+  "bill.type": "Bill type",
+  "bill.status": "Bill status",
+  "bill.sponsor": "Sponsor",
+  "bill.favorites": "Favorites",
+  "modal.title": "Bill details for number",
+  "modal.close": "Close",
+  "yes": "Yes",
+  "no": "No"
+}
