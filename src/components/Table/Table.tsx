@@ -36,6 +36,9 @@ const BasicTable = () => {
   const bills = useSelector((state: any) => state.billsFiltered);
   const isLoading = useSelector((state: any) => state.isLoading);
   const error = useSelector((state: any) => state.error);
+  const favoritesFiltered = useSelector(
+    (state: any) => state.favoritesFiltered,
+  );
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
@@ -105,12 +108,13 @@ const BasicTable = () => {
           <Box marginTop="20px" width="1000px">
             <Typography
               marginBottom="20px"
-              fontSize={32}
+              fontSize={30}
               color={colors.lightBlue}
               fontFamily="monospace"
               textAlign="center"
             >
-              List of bills
+              List of <strong>{favoritesFiltered ? "Favorited" : "All"}</strong>{" "}
+              Bills
             </Typography>
             <TableFilter />
             <TableContainer sx={{ borderRadius: "6px" }}>

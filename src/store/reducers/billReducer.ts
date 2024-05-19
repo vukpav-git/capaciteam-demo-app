@@ -2,6 +2,7 @@ import { BillTypes } from "../../models/Types";
 import {
   ADD_BILL_TO_FAVORITES,
   CHANGE_LOCALE,
+  FILTER_BILLS_FAVORITES,
   FILTER_BILLS_TYPE,
   FILTER_BILLS_TYPE_ENDED,
   FILTER_BILLS_TYPE_STARTED,
@@ -10,6 +11,7 @@ import {
   GET_BILLS_ERROR,
   GET_BILLS_STARTED,
   REMOVE_BILL_FROM_FAVORITES,
+  UNFILTER_BILLS_FAVORITES,
 } from "../actions/ActionTypes";
 
 const initialState: any = {};
@@ -121,6 +123,24 @@ function billReducer(state = initialState, action: any) {
           (a: any, b: any) =>
             parseFloat(a.bill?.billNo) - parseFloat(b.bill?.billNo),
         ),
+      };
+    case FILTER_BILLS_FAVORITES:
+      return {
+        ...state,
+        favoritesFiltered: true,
+        billsFiltered: [
+          // eslint-disable-next-line no-unsafe-optional-chaining
+          ...state?.bills?.filter((item: any) => item.favorites),
+        ].sort(
+          (a: any, b: any) =>
+            parseFloat(a.bill?.billNo) - parseFloat(b.bill?.billNo),
+        ),
+      };
+    case UNFILTER_BILLS_FAVORITES:
+      return {
+        ...state,
+        favoritesFiltered: false,
+        billsFiltered: state?.bills,
       };
     case CHANGE_LOCALE:
       return {
