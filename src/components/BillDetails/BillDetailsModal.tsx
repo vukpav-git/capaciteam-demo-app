@@ -15,7 +15,7 @@ import type { Dispatch } from "redux";
 
 import type { TLanguage } from "../../models/Types";
 import { SupportedLanguages } from "../../models/Types";
-import { CHANGE_LOCALE } from "../../store/actions/ActionTypes";
+import { changeLocale } from "../../redux/features/billSlice";
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
@@ -58,12 +58,12 @@ const BillDetailsModal = ({
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setTabValue(newValue);
     const newLocale: TLanguage = newValue === 0 ? "en" : "ga";
-    dispatch({ type: CHANGE_LOCALE, payload: newLocale });
+    dispatch(changeLocale(newLocale));
   };
 
   const handleCloseDialog = () => {
     setTabValue(0);
-    dispatch({ type: CHANGE_LOCALE, payload: "en" });
+    dispatch(changeLocale("en"));
     handleClose();
   };
 

@@ -1,26 +1,20 @@
+import type { PayloadAction } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import type { Dispatch } from "redux";
+
 import { BillTypes } from "../../models/Types";
-import {
-  ADD_BILL_TO_FAVORITES,
-  CHANGE_LOCALE,
-  FILTER_BILLS_FAVORITES,
-  FILTER_BILLS_TYPE,
-  FILTER_BILLS_TYPE_ENDED,
-  FILTER_BILLS_TYPE_STARTED,
-  GET_BILLS,
-  GET_BILLS_ENDED,
-  GET_BILLS_ERROR,
-  GET_BILLS_STARTED,
-  REMOVE_BILL_FROM_FAVORITES,
-  UNFILTER_BILLS_FAVORITES,
-} from "../actions/ActionTypes";
+import { fetchBillsDataAPI } from "../../services/fetchBillsApi";
 
-const initialState: any = {};
+const initialState = {};
 
-function billReducer(state = initialState, action: any) {
-  switch (action?.type) {
-    case GET_BILLS_STARTED:
+const billSlice = createSlice({
+  name: "bill",
+  initialState,
+  reducers: {
+    getBillsStarted: (state: any) => {
       return { ...state, isLoading: true, error: null };
-    case GET_BILLS:
+    },
+    getBills: (state: any, action: PayloadAction<any>) => {
       return {
         ...state,
         bills: action.payload?.results,
@@ -31,11 +25,14 @@ function billReducer(state = initialState, action: any) {
         resultCount: action.payload?.head?.counts?.resultCount,
         language: action.payload?.head?.lang,
       };
-    case GET_BILLS_ERROR:
+    },
+    getBillsError: (state: any, action: PayloadAction<any>) => {
       return { ...state, isLoading: false, error: action.payload };
-    case GET_BILLS_ENDED:
+    },
+    getBillsEnded: (state: any) => {
       return { ...state, isLoading: false };
-    case ADD_BILL_TO_FAVORITES:
+    },
+    addBillToFavorites: (state: any, action: PayloadAction<any>) => {
       return {
         ...state,
         billsFiltered: [
@@ -67,7 +64,8 @@ function billReducer(state = initialState, action: any) {
             parseFloat(a.bill?.billNo) - parseFloat(b.bill?.billNo),
         ),
       };
-    case REMOVE_BILL_FROM_FAVORITES:
+    },
+    removeBillFromFavorites: (state: any, action: PayloadAction<any>) => {
       return {
         ...state,
         billsFiltered: [
@@ -99,17 +97,20 @@ function billReducer(state = initialState, action: any) {
             parseFloat(a.bill?.billNo) - parseFloat(b.bill?.billNo),
         ),
       };
-    case FILTER_BILLS_TYPE_STARTED:
+    },
+    filterBillsByTypeStarted: (state: any) => {
       return {
         ...state,
         isLoading: true,
       };
-    case FILTER_BILLS_TYPE_ENDED:
+    },
+    filterBillsByTypeEnded: (state: any) => {
       return {
         ...state,
         isLoading: false,
       };
-    case FILTER_BILLS_TYPE:
+    },
+    filterBillsByType: (state: any, action: PayloadAction<any>) => {
       return {
         ...state,
         billsFiltered: [
@@ -124,7 +125,8 @@ function billReducer(state = initialState, action: any) {
             parseFloat(a.bill?.billNo) - parseFloat(b.bill?.billNo),
         ),
       };
-    case FILTER_BILLS_FAVORITES:
+    },
+    filterBillsFavorites: (state: any) => {
       return {
         ...state,
         favoritesFiltered: true,
@@ -136,20 +138,84 @@ function billReducer(state = initialState, action: any) {
             parseFloat(a.bill?.billNo) - parseFloat(b.bill?.billNo),
         ),
       };
-    case UNFILTER_BILLS_FAVORITES:
+    },
+    unfilterBillsFavorites: (state: any) => {
       return {
         ...state,
         favoritesFiltered: false,
         billsFiltered: state?.bills,
       };
-    case CHANGE_LOCALE:
+    },
+    changeLocale: (state: any, action: PayloadAction<any>) => {
       return {
         ...state,
         locale: action.payload,
       };
-    default:
-      return state;
-  }
-}
+    },
+  },
+});
 
-export default billReducer;
+export const {
+  getBillsStarted,
+  getBills,
+  getBillsError,
+  getBillsEnded,
+  addBillToFavorites,
+  removeBillFromFavorites,
+  filterBillsByType,
+  filterBillsByTypeStarted,
+  filterBillsByTypeEnded,
+  filterBillsFavorites,
+  unfilterBillsFavorites,
+  changeLocale,
+} = billSlice.actions;
+
+export const getBillsData = createAsyncThunk(
+  "bills/getBills",
+  async (param: any) => {
+    try {
+      param.dispatch(billSlice.actions.getBillsStarted());
+
+      const response = await fetchBillsDataAPI(
+        param.limit,
+        param.skip,
+        param.lang,
+      );
+      const data = await response.json();
+      if (response.ok) {
+        param.dispatch(billSlice.actions.getBills(data));
+        param.dispatch(billSlice.actions.getBillsEnded());
+      } else {
+        param.dispatch(billSlice.actions.getBillsError(data.message));
+        param.dispatch(billSlice.actions.getBillsEnded());
+        console.error(`Error: ${data.message}`);
+      }
+    } catch (error) {
+      param.dispatch(billSlice.actions.getBillsError(error));
+      param.dispatch(billSlice.actions.getBillsEnded());
+    }
+  },
+);
+
+export const toggleFavorites = async (
+  dispatch: Dispatch,
+  billNo: string,
+  favorites?: boolean,
+) => {
+  try {
+    // since there is no API "POST" for this, here is a mock action as requested in test
+    console.log(
+      `API CALL MOCK: billNo ${billNo} ${!favorites ? "added to" : "removed from"} favorites`,
+    );
+
+    if (favorites) {
+      dispatch(billSlice.actions.removeBillFromFavorites(billNo));
+    } else {
+      dispatch(billSlice.actions.addBillToFavorites(billNo));
+    }
+  } catch (e) {
+    console.error("Error:", e);
+  }
+};
+
+export default billSlice.reducer;
