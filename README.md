@@ -4,7 +4,6 @@ This application is a DEMO app for purposes of client test process (author VP).
 # Getting Started
 ## Running the app in local env
 Clone or download the repo on your computer first.\
-
 To run this application you will need NodeJS installed.\
 You can download it from [here](https://nodejs.org/en/download/package-manager).
 
