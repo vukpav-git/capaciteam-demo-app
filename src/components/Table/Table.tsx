@@ -120,7 +120,7 @@ const BasicTable = () => {
               List of{" "}
               <strong>{favoritesFiltered ? "Favourited" : "All"}</strong> Bills
             </Typography>
-            <TableFilter />
+            {favoritesFiltered ? null : <TableFilter />}
             <TableContainer sx={{ borderRadius: "6px" }}>
               <Table stickyHeader aria-label="Bill info table">
                 <TableHeadCustom columns={BILL_TABLE_COLUMNS} />
