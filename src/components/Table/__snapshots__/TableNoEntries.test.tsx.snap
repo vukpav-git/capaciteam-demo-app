@@ -1,0 +1,11 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Table No Entries tests should match snapshot 1`] = `
+<DocumentFragment>
+  <p
+    class="MuiTypography-root MuiTypography-body1 css-mrmrsa-MuiTypography-root"
+  >
+    No entries found.
+  </p>
+</DocumentFragment>
+`;

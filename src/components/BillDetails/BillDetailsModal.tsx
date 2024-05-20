@@ -52,17 +52,17 @@ const BillDetailsModal = ({
   billSponsor,
   favorites,
 }: IBillDetailsModalProps) => {
-  const [value, setValue] = useState(0);
+  const [tabValue, setTabValue] = useState(0);
   const dispatch: Dispatch = useDispatch();
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
-    setValue(newValue);
+    setTabValue(newValue);
     const newLocale: TLanguage = newValue === 0 ? "en" : "ga";
     dispatch({ type: CHANGE_LOCALE, payload: newLocale });
   };
 
   const handleCloseDialog = () => {
-    setValue(0);
+    setTabValue(0);
     dispatch({ type: CHANGE_LOCALE, payload: "en" });
     handleClose();
   };
@@ -75,7 +75,7 @@ const BillDetailsModal = ({
       fullWidth
     >
       <DialogTitle fontSize={28} sx={{ m: 0, p: 2 }} id="dialog-title">
-        <FormattedMessage id="modal.title" /> #{billNo}
+        <FormattedMessage id="modal.title" /> {billNo}.
       </DialogTitle>
       <IconButton
         aria-label="close"
@@ -92,7 +92,7 @@ const BillDetailsModal = ({
       <DialogContent dividers>
         <Box marginBottom="24px">
           <Tabs
-            value={value}
+            value={tabValue}
             onChange={handleChange}
             aria-label="language tabs"
           >

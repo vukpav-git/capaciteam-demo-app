@@ -23,6 +23,7 @@ import BillDetailsModal from "../BillDetails/BillDetailsModal";
 import SimpleLoader from "../SimpleLoader/SimpleLoader";
 import TableFilter from "./TableFilter";
 import TableHeadCustom from "./TableHeadCustom";
+import TableNoEntries from "./TableNoEntries";
 import TablePaginationCustom from "./TablePaginationCustom";
 
 const BasicTable = () => {
@@ -105,16 +106,16 @@ const BasicTable = () => {
             <SimpleLoader />
           </Box>
         ) : (
-          <Box marginTop="20px" width="1000px">
+          <Box marginTop="20px" width="90%" maxWidth="1100px">
             <Typography
               marginBottom="20px"
               fontSize={30}
-              color={colors.lightBlue}
+              color={colors.lightSilver}
               fontFamily="monospace"
               textAlign="center"
             >
-              List of <strong>{favoritesFiltered ? "Favorited" : "All"}</strong>{" "}
-              Bills
+              List of{" "}
+              <strong>{favoritesFiltered ? "Favourited" : "All"}</strong> Bills
             </Typography>
             <TableFilter />
             <TableContainer sx={{ borderRadius: "6px" }}>
@@ -160,47 +161,27 @@ const BasicTable = () => {
                           {row.bill?.sponsors[0]?.sponsor?.by?.showAs ||
                             row.bill?.sponsors[0]?.sponsor?.as?.showAs}
                         </TableCell>
-                        <TableCell
-                          onClick={() =>
-                            handleFavoritesToggle(
-                              row.bill?.billNo,
-                              row?.favorites,
-                            )
-                          }
-                          align="right"
-                        >
-                          {row?.favorites ? (
-                            <Box
-                              zIndex={100}
-                              position="relative"
-                              component="div"
-                            >
-                              <StarIcon />
-                            </Box>
-                          ) : (
-                            <Box
-                              zIndex={100}
-                              position="relative"
-                              component="div"
-                            >
-                              <StarBorderIcon />
-                            </Box>
-                          )}
+                        <TableCell align="right">
+                          <Box
+                            onClick={() =>
+                              handleFavoritesToggle(
+                                row.bill?.billNo,
+                                row?.favorites,
+                              )
+                            }
+                            zIndex={100}
+                            position="relative"
+                            component="span"
+                            title={`${row?.favorites ? "Remove from" : "Add to"} favorites`}
+                          >
+                            {row?.favorites ? <StarIcon /> : <StarBorderIcon />}
+                          </Box>
                         </TableCell>
                       </TableRow>
                     ))}
                 </TableBody>
               </Table>
-              {!bills || bills.length === 0 ? (
-                <Typography
-                  marginLeft="10px"
-                  marginTop="4px"
-                  fontSize={16}
-                  fontFamily="monospace"
-                >
-                  No entries found.
-                </Typography>
-              ) : null}
+              {!bills || bills.length === 0 ? <TableNoEntries /> : null}
             </TableContainer>
             <TablePaginationCustom
               handleChangePage={handleChangePage}

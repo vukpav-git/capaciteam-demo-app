@@ -1,6 +1,6 @@
 import { Box, FormControl, InputLabel, MenuItem, Select } from "@mui/material";
-import { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 import { BillTypes, type TBillType } from "../../models/Types";
 import {
@@ -13,6 +13,15 @@ const TableFilter = () => {
   const [billType, setBillType] = useState<TBillType>(BillTypes.All);
   const dispatch = useDispatch();
 
+  const favoritesFiltered = useSelector(
+    (state: any) => state.favoritesFiltered,
+  );
+
+  useEffect(() => {
+    // reset filter on tab change
+    setBillType(BillTypes.All);
+  }, [favoritesFiltered]);
+
   const handleChange = (typeVal: TBillType) => {
     dispatch({ type: FILTER_BILLS_TYPE_STARTED });
     setBillType(typeVal);
@@ -23,13 +32,18 @@ const TableFilter = () => {
 
   return (
     <Box marginBottom="12px" display="flex" justifyContent="flex-end">
-      <FormControl variant="standard" sx={{ m: 1, minWidth: "270px" }}>
-        <InputLabel>Filter by Bill type</InputLabel>
+      <FormControl
+        data-testid="form-control-id"
+        variant="standard"
+        sx={{ m: 1, minWidth: "242px" }}
+      >
+        <InputLabel sx={{ fontSize: 18 }}>Filter by "Bill type"</InputLabel>
         <Select
+          data-testid="TableFilter-select"
           labelId="TableFilter-label"
           value={billType}
           onChange={(e: any) => handleChange(e.target.value)}
-          label="Type"
+          label="Bill Type"
         >
           <MenuItem value="All">All</MenuItem>
           <MenuItem value="Public">Public</MenuItem>

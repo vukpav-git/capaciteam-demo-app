@@ -35,7 +35,12 @@ const TopNav = () => {
   };
 
   return (
-    <AppBar position="sticky">
+    <AppBar
+      position="sticky"
+      sx={{
+        backgroundColor: colors.charcoal,
+      }}
+    >
       <Container maxWidth="sm">
         <Toolbar disableGutters>
           <Typography
@@ -45,9 +50,9 @@ const TopNav = () => {
             sx={{
               mr: 2,
               display: { xs: "none", md: "flex" },
-              fontFamily: "sans-serif",
               fontWeight: 700,
-              letterSpacing: ".3rem",
+              fontSize: 25,
+              letterSpacing: ".15rem",
               color: colors.lightGreen,
               textDecoration: "none",
             }}
@@ -56,28 +61,11 @@ const TopNav = () => {
             <FolderOpenIcon
               sx={{
                 position: "relative",
-                top: "4px",
+                top: "8px",
               }}
             />
           </Typography>
-          <Typography
-            variant="h5"
-            noWrap
-            component="a"
-            sx={{
-              mr: 2,
-              display: { xs: "flex", md: "none" },
-              flexGrow: 1,
-              fontFamily: "monospace",
-              fontWeight: 700,
-              letterSpacing: ".3rem",
-              color: "inherit",
-              textDecoration: "none",
-            }}
-          >
-            {COMPANY_NAME}
-          </Typography>
-          <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
+          <Box sx={{ flexGrow: 1, display: { xs: "flex" } }}>
             {pages.map((page) => (
               <Button
                 key={page}
