@@ -74,7 +74,7 @@ const TopNav = () => {
                 sx={{
                   my: 2,
                   marginLeft: 1,
-                  color: page === activePage ? colors.orange : colors.orange,
+                  color: colors.orange,
                   fontWeight: page === activePage ? 700 : 400,
                   opacity: page === activePage ? 1 : 0.6,
                   fontSize: page === activePage ? 16 : 15,
