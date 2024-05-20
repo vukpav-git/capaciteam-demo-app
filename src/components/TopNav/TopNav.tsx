@@ -25,13 +25,15 @@ const TopNav = () => {
   const [activePage, setActivePage] = useState(pages[0]);
 
   const toggleFavoritesView = (page: string) => {
-    setActivePage(page);
-
-    if (activePage === "Favourited bills") {
-      dispatch({ type: UNFILTER_BILLS_FAVORITES });
-    } else {
-      dispatch({ type: FILTER_BILLS_FAVORITES });
+    if (page !== activePage) {
+      if (page === "Favourited bills") {
+        dispatch({ type: FILTER_BILLS_FAVORITES });
+      } else {
+        dispatch({ type: UNFILTER_BILLS_FAVORITES });
+      }
     }
+
+    setActivePage(page);
   };
 
   return (
@@ -51,7 +53,7 @@ const TopNav = () => {
               mr: 2,
               display: { xs: "none", md: "flex" },
               fontWeight: 700,
-              fontSize: 25,
+              fontSize: 24,
               letterSpacing: ".15rem",
               color: colors.lightGreen,
               textDecoration: "none",
@@ -72,8 +74,9 @@ const TopNav = () => {
                 sx={{
                   my: 2,
                   marginLeft: 1,
-                  color: page === activePage ? colors.orange : colors.white,
+                  color: page === activePage ? colors.orange : colors.orange,
                   fontWeight: page === activePage ? 700 : 400,
+                  opacity: page === activePage ? 1 : 0.6,
                   fontSize: page === activePage ? 16 : 15,
                 }}
                 onClick={() => toggleFavoritesView(page)}
