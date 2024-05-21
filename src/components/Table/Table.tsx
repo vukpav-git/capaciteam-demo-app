@@ -13,11 +13,11 @@ import Table from "@mui/material/Table";
 import TableContainer from "@mui/material/TableContainer";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import type { Dispatch } from "redux";
 
 import { BILL_TABLE_COLUMNS } from "../../constants/Constants";
 import type { IBillDataRow } from "../../models/Types";
-import { getBillsData, toggleFavorites } from "../../store/actions/BillActions";
+import { getBillsData, toggleFavorites } from "../../redux/features/billSlice";
+import type { AppDispatch } from "../../redux/store";
 import { colors } from "../../styles/colors";
 import BillDetailsModal from "../BillDetails/BillDetailsModal";
 import SimpleLoader from "../SimpleLoader/SimpleLoader";
@@ -32,7 +32,8 @@ const BasicTable = () => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
 
-  const dispatch: Dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
+
   const resultCount = useSelector((state: any) => state.resultCount);
   const bills = useSelector((state: any) => state.billsFiltered);
   const isLoading = useSelector((state: any) => state.isLoading);
@@ -53,7 +54,9 @@ const BasicTable = () => {
   };
 
   const handleGetBillsData = () => {
-    getBillsData(dispatch, rowsPerPage, rowsPerPage * page);
+    dispatch(
+      getBillsData({ dispatch, limit: rowsPerPage, skip: rowsPerPage * page }),
+    );
   };
 
   useEffect(() => {
@@ -117,7 +120,7 @@ const BasicTable = () => {
               List of{" "}
               <strong>{favoritesFiltered ? "Favourited" : "All"}</strong> Bills
             </Typography>
-            <TableFilter />
+            {favoritesFiltered ? null : <TableFilter />}
             <TableContainer sx={{ borderRadius: "6px" }}>
               <Table stickyHeader aria-label="Bill info table">
                 <TableHeadCustom columns={BILL_TABLE_COLUMNS} />

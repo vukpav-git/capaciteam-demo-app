@@ -13,9 +13,9 @@ import type { Dispatch } from "redux";
 
 import { COMPANY_NAME } from "../../constants/Constants";
 import {
-  FILTER_BILLS_FAVORITES,
-  UNFILTER_BILLS_FAVORITES,
-} from "../../store/actions/ActionTypes";
+  filterBillsFavorites,
+  unfilterBillsFavorites,
+} from "../../redux/features/billSlice";
 import { colors } from "../../styles/colors";
 
 const TopNav = () => {
@@ -27,9 +27,9 @@ const TopNav = () => {
   const toggleFavoritesView = (page: string) => {
     if (page !== activePage) {
       if (page === "Favourited bills") {
-        dispatch({ type: FILTER_BILLS_FAVORITES });
+        dispatch(filterBillsFavorites());
       } else {
-        dispatch({ type: UNFILTER_BILLS_FAVORITES });
+        dispatch(unfilterBillsFavorites());
       }
     }
 

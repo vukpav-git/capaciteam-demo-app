@@ -44,9 +44,9 @@ describe("Table Filter tests", () => {
 
     const actions = store.getActions();
     expect(actions).toEqual([
-      { type: "FILTER_BILLS_TYPE_STARTED" },
-      { type: "FILTER_BILLS_TYPE", payload: BillTypes.Private },
-      { type: "FILTER_BILLS_TYPE_ENDED" },
+      { type: "bill/filterBillsByTypeStarted" },
+      { type: "bill/filterBillsByType", payload: BillTypes.Private },
+      { type: "bill/filterBillsByTypeEnded" },
     ]);
   });
 });

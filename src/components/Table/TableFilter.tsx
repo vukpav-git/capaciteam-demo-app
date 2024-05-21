@@ -1,17 +1,18 @@
 import { Box, FormControl, InputLabel, MenuItem, Select } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import type { Dispatch } from "redux";
 
 import { BillTypes, type TBillType } from "../../models/Types";
 import {
-  FILTER_BILLS_TYPE,
-  FILTER_BILLS_TYPE_ENDED,
-  FILTER_BILLS_TYPE_STARTED,
-} from "../../store/actions/ActionTypes";
+  filterBillsByType,
+  filterBillsByTypeEnded,
+  filterBillsByTypeStarted,
+} from "../../redux/features/billSlice";
 
 const TableFilter = () => {
   const [billType, setBillType] = useState<TBillType>(BillTypes.All);
-  const dispatch = useDispatch();
+  const dispatch: Dispatch = useDispatch();
 
   const favoritesFiltered = useSelector(
     (state: any) => state.favoritesFiltered,
@@ -23,11 +24,11 @@ const TableFilter = () => {
   }, [favoritesFiltered]);
 
   const handleChange = (typeVal: TBillType) => {
-    dispatch({ type: FILTER_BILLS_TYPE_STARTED });
+    dispatch(filterBillsByTypeStarted());
     setBillType(typeVal);
 
-    dispatch({ type: FILTER_BILLS_TYPE, payload: typeVal });
-    dispatch({ type: FILTER_BILLS_TYPE_ENDED });
+    dispatch(filterBillsByType(typeVal));
+    dispatch(filterBillsByTypeEnded());
   };
 
   return (
